@@ -22,7 +22,7 @@ community& get_node_wcc(const undirected_graph& g, int node, community& wcc) {
 		int v = q.front();
 		wcc.push_back(v);
 		q.pop();
-		for(auto& i : g[v]) {
+		for (auto& i : g[v]) {
 			if (vst[i] == 0) {
 				q.push(i);
 				vst[i] = true;
@@ -44,7 +44,7 @@ bool is_connected(const undirected_graph& g, int v, int u) {
 	while (!q.empty()) {
 		int v = q.front();
 		q.pop();
-		for(auto& i : g[v]) {
+		for (auto& i : g[v]) {
 			if (i == u)
 				return true;
 			if (vst[i] == 0) {
@@ -66,7 +66,7 @@ static community& __get_wcc(const undirected_graph& g, int node, community& wcc,
 		int v = q.front();
 		q.pop();
 		wcc.push_back(v);
-		for(auto& i : g[v]) {
+		for (auto& i : g[v]) {
 			if (vst[i] == 0) {
 				q.push(i);
 				vst[i] = true;
@@ -81,8 +81,8 @@ communityV& get_wcc(const undirected_graph& g, communityV& cmtv) {
 	int n = g.size();
 	vector<bool> vst(n);
 	cmtv.clear();
-	for(int i = 0;i < n;i++) {
-		if(!vst[i]) {
+	for (int i = 0; i < n; i++) {
+		if (!vst[i]) {
 			cmtv.push_back(community());
 			__get_wcc(g, i, *cmtv.rbegin(), vst);
 		}

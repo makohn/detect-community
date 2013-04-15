@@ -14,6 +14,4 @@ using namespace std;
 #define community vector<int>
 #define communityV vector<vector<int> >
 
-
-
 #endif /* CMTYCONFIG_H_ */

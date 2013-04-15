@@ -8,12 +8,23 @@
 
 #include <iostream>
 #include <vector>
+#include <ctime>
+#include <time.h>
 using namespace std;
-
 #include "connection.h"
-#include "betweenness.h"
-
+#include "community.h"
+#include "graphOperation.h"
+undirected_graph g;
+communityV cmtyV;
 int main() {
-	cout << "!!!dectect communtiy!!!" << endl; // prints !!!Hello World!!!
+	FILE * filp = fopen("data/0.edges", "r");
+	read_graph(g, filp);
+	fclose(filp);
+	//clock_t start = clock();
+	double Q = GirvanNewman(g, cmtyV);
+	cout << Q << endl;
+	//clock_t end = clock();
+	/*printf("%d.%03d\n", (end - start) / CLOCKS_PER_SEC,
+			(end - start) % CLOCKS_PER_SEC);*/
 	return 0;
 }
