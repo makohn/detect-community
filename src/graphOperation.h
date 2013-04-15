@@ -14,20 +14,15 @@
 #include <fstream>
 using namespace std;
 
-void remove_edge(undirected_graph& g, int v, int u) {
+static void _remove_edge(undirected_graph& g, int v, int u) {
 	auto i = find(g[v].begin(), g[v].end(), u);
-	auto j = find(g[u].begin(), g[u].end(), v);
-	if (i != g[v].end()) {
+	if(i != g[v].end()) {
 		g[v].erase(i);
 	}
-	if (j != g[u].end()) {
-		g[u].erase(j);
-	}
 }
-
-static void _add_edge(undirected_graph& g, int v, int u) {
-	g[v].push_back(u);
-	g[u].push_back(v);
+void remove_edge(undirected_graph& g, int v, int u) {
+	_remove_edge(g, v, u);
+	_remove_edge(g, u, v);
 }
 
 void add_edge(undirected_graph& g, int v, int u) {
@@ -35,11 +30,12 @@ void add_edge(undirected_graph& g, int v, int u) {
 		g.resize(v + 1);
 	if (u >= int(g.size()))
 		g.resize(u + 1);
-	_add_edge(g, v, u);
+	g[u].push_back(v);
 }
 void read_graph(undirected_graph& g, istream& in) {
 	int v, u;
 	while (in >> v >> u) {
+		v--, u--;
 		add_edge(g, v, u);
 	}
 }
@@ -47,6 +43,7 @@ void read_graph(undirected_graph& g, istream& in) {
 void read_graph(undirected_graph& g, FILE* filp) {
 	int u, v;
 	while (fscanf(filp, "%d %d", &v, &u) == 2) {
+		v--, u--;
 		add_edge(g, v, u);
 	}
 }
