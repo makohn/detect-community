@@ -29,7 +29,6 @@ static void GirvanNewmanStep(undirected_graph& g, community& cmty1,
 		const int v = btw[0].v;
 		//remove edge
 		remove_edge(g, u, v);
-		//printf("%d %d\n", u, v);
 		if (is_connected(g, u, v) == false) {
 			get_node_wcc(g, u, cmty1);
 			get_node_wcc(g, v, cmty2);
@@ -54,6 +53,7 @@ static double GirvanNewmanModularity(undirected_graph& g, communityV& cmtyV,
 	return Mod / (2 * edge);
 }
 double GirvanNewman(undirected_graph& g, communityV& cmtyV) {
+	cmtyV.clear();
 	int n = g.size();
 	vector<int> dgree(n);
 	for (int i = 0; i < n; i++) {
@@ -72,7 +72,6 @@ double GirvanNewman(undirected_graph& g, communityV& cmtyV) {
 		}
 		if (cmty1.size() == 0 || cmty2.size() == 0)
 			break;
-		cout << Q << endl;
 	}
 	return bestQ;
 }

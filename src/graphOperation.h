@@ -16,7 +16,7 @@ using namespace std;
 
 static void _remove_edge(undirected_graph& g, int v, int u) {
 	auto i = find(g[v].begin(), g[v].end(), u);
-	if(i != g[v].end()) {
+	if (i != g[v].end()) {
 		g[v].erase(i);
 	}
 }
@@ -38,6 +38,9 @@ void read_graph(undirected_graph& g, istream& in) {
 		v--, u--;
 		add_edge(g, v, u);
 	}
+	for (int i = 0; i < int(g.size()); i++) {
+		sort(g[i].begin(), g[i].end());
+	}
 }
 
 void read_graph(undirected_graph& g, FILE* filp) {
@@ -45,6 +48,9 @@ void read_graph(undirected_graph& g, FILE* filp) {
 	while (fscanf(filp, "%d %d", &v, &u) == 2) {
 		v--, u--;
 		add_edge(g, v, u);
+	}
+	for (int i = 0; i < int(g.size()); i++) {
+		sort(g[i].begin(), g[i].end());
 	}
 }
 

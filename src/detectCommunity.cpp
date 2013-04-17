@@ -10,6 +10,7 @@
 #include <vector>
 #include <ctime>
 #include <time.h>
+#include <algorithm>
 using namespace std;
 #include "connection.h"
 #include "community.h"
@@ -20,11 +21,11 @@ int main() {
 	FILE * filp = fopen("data/0.edges", "r");
 	read_graph(g, filp);
 	fclose(filp);
-	//clock_t start = clock();
+	clock_t start = clock();
 	double Q = GirvanNewman(g, cmtyV);
+	printf("Modularity is %lf\n", Q);
 	cout << Q << endl;
-	//clock_t end = clock();
-	/*printf("%d.%03d\n", (end - start) / CLOCKS_PER_SEC,
-			(end - start) % CLOCKS_PER_SEC);*/
+	clock_t end = clock();
+	printf("%lf\n", double(end - start) / CLOCKS_PER_SEC);
 	return 0;
 }
