@@ -14,10 +14,7 @@ using namespace std;
 #include "connection.h"
 #include "betweenness.h"
 #include "graphOperation.h"
-static void GirvanNewmanStep(undirected_graph& g, community& cmty1,
-		community& cmty2) {
-	cmty1.clear();
-	cmty2.clear();
+static void GirvanNewmanStep(undirected_graph& g) {
 	vector<edgeBtw> btw;
 	while (true) {
 		btw.clear();
@@ -30,8 +27,6 @@ static void GirvanNewmanStep(undirected_graph& g, community& cmty1,
 		//remove edge
 		remove_edge(g, u, v);
 		if (is_connected(g, u, v) == false) {
-			get_node_wcc(g, u, cmty1);
-			get_node_wcc(g, v, cmty2);
 			return;
 		}
 	}
@@ -62,16 +57,13 @@ double GirvanNewman(undirected_graph& g, communityV& cmtyV) {
 	const int e = accumulate(dgree.begin(), dgree.end(), 0) / 2;
 	double bestQ = -1;
 	communityV curCmty;
-	community cmty1, cmty2;
-	while (true) {
-		GirvanNewmanStep(g, cmty1, cmty2);
+	for(int i = 0;i < e;i++) {
+		GirvanNewmanStep(g);
 		double Q = GirvanNewmanModularity(g, cmtyV, dgree, e);
 		if (bestQ < Q) {
 			cmtyV.swap(curCmty);
 			bestQ = Q;
 		}
-		if (cmty1.size() == 0 || cmty2.size() == 0)
-			break;
 	}
 	return bestQ;
 }
