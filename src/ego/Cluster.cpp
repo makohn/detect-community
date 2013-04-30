@@ -26,16 +26,17 @@ Cluster::~Cluster() {
 void Cluster::train(int K, int reps, int gradientReps, int improveReps,
 		double lamda, int whichLoss) {
 	//initialize
+	int n_feature = graph_->num_features_;
+	int n_node = graph_->num_nodes_;
+	double rate = 1.0 / graph_->num_nodes_ / graph_->num_nodes_;
 	srand(time(0));
-	num_ = K * graph_->num_features_;
 	delete[] theta_;
 	delete[] alpha_;
+	num_ = K * n_feature;
 	theta_ = new double[num_];
 	alpha_ = new double[K];
 	chat_ = vector<set<int> >(K);
-	int n_feature = graph_->num_features_;
-	int n_node = graph_->num_nodes_;
-	double learning_rate = 1.0 / graph_->num_nodes_ / graph_->num_nodes_;
+
 	for (int rep = 0; rep < reps; rep++) {
 		//for each circle
 		for (int k = 0; k < K; k++) {
@@ -44,17 +45,24 @@ void Cluster::train(int K, int reps, int gradientReps, int improveReps,
 					|| int(chat_[k].size()) == n_node) {
 				chat_[k].clear();
 				for (int i = 0; i < graph_->num_nodes_; i++) {
-					if (rand() & 1)
+					if (1)
 						chat_[k].insert(i);
 				}
 				// set a single feature 1.0, other is 0.0
 				int start = k * n_feature;
 				fill(theta_ + start, theta_ + start + n_feature, 0.0);
 				theta_[start + rand() % n_feature] = 1.0;
+				theta_[start] = 1.0;
 				alpha_[k] = 1.0;
 			}
-			printf("%u%c", chat_[k].size(), k == K - 1 ? '\n' : ' ');
+			//printf("%u%c", chat_[k].size(), k == K - 1 ? '\n' : ' ');
 		}
+		/*
+		 printf("%d\n", num_);
+		 for (int i = 0; i < num_; i++) {
+		 printf("%.2lf%c", theta_[i], i %  n_feature == n_feature - 1 ? '\n' : ' ');
+		 }
+		 */
 		vector<int> order;
 		for (int k = 0; k < K; k++) {
 			order.push_back(k);
@@ -77,24 +85,25 @@ void Cluster::train(int K, int reps, int gradientReps, int improveReps,
 			dl(dldt, dlda, K, lamda);
 		}
 		for (int i = 0; i < num_; i++) {
-			theta_[i] += learning_rate * dldt[i];
+			theta_[i] += rate * dldt[i];
 		}
 		for (int k = 0; k < K; k++) {
-			alpha_[k] += learning_rate * dlda[k];
+			alpha_[k] += rate * dlda[k];
 		}
 		loglike_curr = loglikelihook(theta_, alpha_, chat_);
 		//if current loglikelihook is small than previous loglikelihook, recover
 		if (loglike_curr < loglike_prev) {
 			for (int i = 0; i < num_; i++)
-				theta_[i] -= learning_rate * dldt[i];
+				theta_[i] -= rate * dldt[i];
 			for (int k = 0; k < K; k++)
-				alpha_[k] -= learning_rate * dlda[k];
+				alpha_[k] -= rate * dlda[k];
 			loglike_curr = loglike_prev;
 			delete[] dlda;
 			delete[] dldt;
 			break;
 		}
 		loglike_prev = loglike_curr;
+		printf("loglikelihook %lf\n", loglike_prev);
 		delete[] dlda;
 		delete[] dldt;
 	}
@@ -131,7 +140,6 @@ double Cluster::loglikelihook(const double * theta, const double * alpha,
 }
 std::set<int> Cluster::minimize_graphcuts(int k, int improveReps,
 		int& changed) {
-	return std::set<int>();
 	int E = (int) graph_->feature_.size();
 	int K = (int) chat_.size();
 	int N = graph_->num_features_;
@@ -139,7 +147,6 @@ std::set<int> Cluster::minimize_graphcuts(int k, int improveReps,
 	q.AddNode(graph_->num_nodes_);
 	map<pair<int, int>, double> mc00;
 	map<pair<int, int>, double> mc11;
-	vector<pair<double, pair<int, int> > > diff_c;
 	for (const auto & i : graph_->edge_features_) {
 		pair<int, int> e = i.first;
 		int node0 = e.first;
@@ -157,12 +164,11 @@ std::set<int> Cluster::minimize_graphcuts(int k, int improveReps,
 							1 : -alpha_[l];
 			other_product += d * inp(i.second, theta_ + l * N, N);
 		}
-		double e00, e11;
-		// TODO a question ?
+		double e00 = 0.0, e11 = 0.0;
 		if (exist) {
 			e00 = -other_product + alpha_[k] * inner_product
 					+ log(1.0 + exp(other_product - alpha_[k] * inner_product));
-			e11 = other_product - inner_product
+			e11 = -other_product - inner_product
 					+ log(1.0 + exp(other_product + inner_product));
 		} else {
 			e00 = log(1.0 + exp(other_product - alpha_[k] * inner_product));
@@ -170,12 +176,9 @@ std::set<int> Cluster::minimize_graphcuts(int k, int improveReps,
 		}
 		mc00[i.first] = e00;
 		mc11[i.first] = e11;
-		if (exist) {
-			q.AddPairwiseTerm(i.first.first, i.first.second, e00, e00, e00,
-					e11);
-		} else {
-			diff_c.push_back(make_pair(-fabs(e00 - e11), i.first));
-		}
+		/*printf("%d %d %s e00 = %.2lf, e11 = %.2lf\n", node0, node1,
+				exist ? "YES" : "NO", e00, e11);*/
+		q.AddPairwiseTerm(node0, node1, e00, e00, e00, e11);
 	}
 	for (int i = 0; i < graph_->num_nodes_; i++) {
 		if (chat_[k].find(i) == chat_[k].end()) {
@@ -193,46 +196,48 @@ std::set<int> Cluster::minimize_graphcuts(int k, int improveReps,
 	vector<int> old_label(graph_->num_nodes_);
 	vector<int> new_label(graph_->num_nodes_);
 	set<int> res;
-	for(int i = 0;i < graph_->num_nodes_;i++) {
+	for (int i = 0; i < graph_->num_nodes_; i++) {
 		new_label[i] = 0;
 		int id = q.GetLabel(i);
-		if(id == 1) {
+		if (id == 1) {
 			res.insert(i);
 			new_label[i] = 1;
-		} else if(id < 0 && chat_[k].find(i) != chat_[k].end()) {
+		} else if (id < 0 && chat_[k].find(i) != chat_[k].end()) {
 			res.insert(i);
 			new_label[i] = 1;
 		}
-		if(chat_[k].find(i) == chat_[k].end()) {
+		if (chat_[k].find(i) == chat_[k].end()) {
 			old_label[i] = 0;
 		} else {
 			old_label[i] = 1;
 		}
 	}
 	double oldE = 0.0, newE = 0.0;
-	for(const auto & i : graph_->edge_features_) {
+	for (const auto & i : graph_->edge_features_) {
 		pair<int, int> e = i.first;
 		int node0 = e.first;
 		int node1 = e.second;
+
 		int old_n0 = old_label[node0];
 		int old_n1 = old_label[node1];
 		int new_n0 = new_label[node0];
 		int new_n1 = new_label[node1];
-		if(old_n0 && old_n1) {
+		if (old_n0 && old_n1) {
 			oldE += mc11[e];
 		} else {
 			oldE += mc00[e];
 		}
-		if(new_n0 && new_n1) {
+		if (new_n0 && new_n1) {
 			newE += mc11[e];
 		} else {
 			newE += mc00[e];
 		}
 	}
-	if(newE > oldE || res.size() == 0) {
+	//printf("%d %.2lf %.2lf\n", k, newE, oldE);
+	if (newE > oldE || res.size() == 0) {
 		res = chat_[k];
 	} else {
-		changed = (res == chat_[k]);
+		changed |= (res != chat_[k]);
 	}
 	return res;
 }
