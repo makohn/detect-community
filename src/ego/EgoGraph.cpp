@@ -33,7 +33,6 @@ EgoGraph::EgoGraph(const string& node_feature_file,
 }
 
 EgoGraph::~EgoGraph() {
-	// TODO Auto-generated destructor stub
 	for (const auto & feature : edge_features_) {
 		delete feature.second;
 	}
@@ -49,30 +48,28 @@ vector<int> EgoGraph::read_list(const string& self_feature) {
 
 void EgoGraph::read_node_feature(const string& node_feature_file,
 		const string& self_feature_file) {
-	ifstream self_fin(self_feature_file);
+	// 暂时不需要和ego节点对比的feature
+	// ifstream self_fin(self_feature_file);
+	// node 0 is ego node, index is always 0
+	// getline(self_fin, data);
+	// feature_.push_back(read_list(data));
+	// self_fin.close();
 	ifstream node_fin(node_feature_file);
 	string data;
-
 	feature_.clear();
-	// node 0 is ego node, index is always 0
-	node_index_[0] = 0;
-	index_node_[0] = 0;
-	getline(self_fin, data);
-	feature_.push_back(read_list(data));
-
 	// normal node
 	while (getline(node_fin, data)) {
 		//first element is node index
 		vector<int> f = read_list(data);
-		int cur_node = f[0];
-		node_index_[cur_node] = int(f.size());
-		index_node_[int(f.size())] = cur_node;
+		int cur_node = f[0], index = int(node_index_.size());
+		node_index_[cur_node] = index;
+		index_node_[index] = cur_node;
 		f.erase(f.begin());
 		feature_.push_back(f);
 	}
 	num_nodes_ = feature_.size();
 	num_features_ = feature_[0].size() + 1;
-	self_fin.close();
+
 	node_fin.close();
 }
 
