@@ -37,6 +37,12 @@ EgoGraph::~EgoGraph() {
 		delete feature.second;
 	}
 }
+int EgoGraph::get_node(int index) {
+	return index_node_[index];
+}
+int EgoGraph::get_index(int node) {
+	return node_index_[node];
+}
 
 vector<int> EgoGraph::read_list(const string& self_feature) {
 	istringstream sin(self_feature);

@@ -22,7 +22,7 @@ public:
 	vector<set<int> > chat_;
 	void train(int K, int reps, int gradientReps, int improveReps, double lamda,
 			int whichLoss);
-	double loglikelihook(const double * theta, const double * alpha,
+	double loglikelihood(const double * theta, const double * alpha,
 			const vector<set<int> >& chat);
 private:
 	std::set<int> minimize_graphcuts(int k, int improveReps, int& changed);

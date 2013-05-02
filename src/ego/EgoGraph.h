@@ -26,6 +26,8 @@ public:
 	vector<vector<int> > feature_;
 	int num_nodes_;
 	int num_features_;
+	int get_node(int index);
+	int get_index(int node);
 private:
 	map<int, int> node_index_;
 	map<int, int> index_node_;

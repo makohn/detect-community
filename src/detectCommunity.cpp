@@ -6,9 +6,9 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include <iostream>
 #include <vector>
 #include <ctime>
+#include <cstdio>
 #include <time.h>
 #include <algorithm>
 using namespace std;
@@ -17,11 +17,25 @@ using namespace std;
 #include "girvannewman/graphOperation.h"
 #include "ego/Cluster.h"
 #include "ego/EgoGraph.h"
-undirected_graph g;
-communityV cmtyV;
+FILE * logger;
+void print_info(const ego::Cluster& cluster, FILE * log) {
+	fprintf(log, "nodes : %d feature : %d\n", cluster.graph_->num_nodes_,
+			cluster.graph_->num_features_);
+	vector<set<int> > chat = cluster.chat_;
+	for (size_t i = 0; i < chat.size(); i++) {
+		const set<int>& group = chat[i];
+		fprintf(log, "group %u\n", i + 1);
+		fprintf(log, "size : %u\n", group.size());
+		for (const auto & index : group) {
+			int person = cluster.graph_->get_node(index);
+			fprintf(log, "%d ", person);
+		}
+		fprintf(log, "\n");
+	}
+}
+
 void test_ego(int K, int lamda, int reps, int gradientReps, int improveReps,
 		const string& name) {
-	cout << "run on file 698" << endl;
 	const string nodeFeatureFile = name + ".feat";
 	const string selfFeatureFile = name + ".egofeat";
 	const string clusterFile = name + ".circles";
@@ -30,19 +44,13 @@ void test_ego(int K, int lamda, int reps, int gradientReps, int improveReps,
 			edgeFile);
 	ego::Cluster cluster(&graph);
 	cluster.train(K, reps, gradientReps, improveReps, lamda, 1);
-	// test code
-	/*cout << graph.num_features_ << " " << graph.num_nodes_ << endl;
-	for(const auto & i : graph.edge_features_) {
-		printf("%d %d\n", i.first.first, i.first.second);
-		for(const auto & j : *(i.second)) {
-			printf("(%d, %d) ", j.first, j.second);
-		}
-		printf("\n");
-	}*/
-	cout << "run over" << endl;
+	print_info(cluster, logger);
 }
+
 int main() {
-	/*FILE * filp = fopen("data/0.edges", "r");
+	/*undirected_graph g;
+	 communityV cmtyV;
+	 FILE * filp = fopen("data/0.edges", "r");
 	 read_graph(g, filp);
 	 fclose(filp);
 	 clock_t start = clock();
@@ -51,6 +59,8 @@ int main() {
 	 write_community(cmtyV, stdout);
 	 clock_t end = clock();
 	 printf("%lf\n", double(end - start) / CLOCKS_PER_SEC);*/
-	test_ego(3, 1, 25, 50, 5, "data/698");
+	logger = fopen("res.out", "w");
+	test_ego(3, 1, 1, 50, 5, "data/698");
+	fclose(logger);
 	return 0;
 }
