@@ -37,11 +37,13 @@ EgoGraph::~EgoGraph() {
 		delete feature.second;
 	}
 }
-int EgoGraph::get_node(int index) {
-	return index_node_[index];
+int EgoGraph::get_node(int index) const {
+	auto i = index_node_.find(index);
+	return i == index_node_.end() ? -1 : i->second;
 }
-int EgoGraph::get_index(int node) {
-	return node_index_[node];
+int EgoGraph::get_index(int node) const {
+	auto i = node_index_.find(node);
+	return i == node_index_.end() ? -1 : i->second;
 }
 
 vector<int> EgoGraph::read_list(const string& self_feature) {

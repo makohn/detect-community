@@ -12,12 +12,10 @@
 #include <time.h>
 #include <algorithm>
 using namespace std;
-#include "girvannewman/connection.h"
-#include "girvannewman/community.h"
-#include "girvannewman/graphOperation.h"
+#include "girvannewman/girvannewman.h"
 #include "ego/Cluster.h"
 #include "ego/EgoGraph.h"
-FILE * logger;
+//FILE * logger;
 void print_info(const ego::Cluster& cluster, FILE * log) {
 	fprintf(log, "nodes : %d feature : %d\n", cluster.graph_->num_nodes_,
 			cluster.graph_->num_features_);
@@ -44,23 +42,23 @@ void test_ego(int K, int lamda, int reps, int gradientReps, int improveReps,
 			edgeFile);
 	ego::Cluster cluster(&graph);
 	cluster.train(K, reps, gradientReps, improveReps, lamda, 1);
-	print_info(cluster, logger);
+	//print_info(cluster, logger);
 }
-
 int main() {
-	/*undirected_graph g;
-	 communityV cmtyV;
-	 FILE * filp = fopen("data/0.edges", "r");
-	 read_graph(g, filp);
-	 fclose(filp);
-	 clock_t start = clock();
-	 double Q = GirvanNewman(g, cmtyV);
-	 printf("Modularity is %lf\n", Q);
-	 write_community(cmtyV, stdout);
-	 clock_t end = clock();
-	 printf("%lf\n", double(end - start) / CLOCKS_PER_SEC);*/
-	logger = fopen("res.out", "w");
-	test_ego(3, 1, 1, 50, 5, "data/698");
-	fclose(logger);
+
+	//logger = fopen("res.out", "w");
+	//test_ego(3, 1, 1, 50, 5, "data/698");
+	//fclose(logger);
+	girvanNewmanAlgo("data/0.edges", "result/0.newman.data");
+	girvanNewmanAlgo("data/107.edges", "result/107.newman.data");//too large
+	girvanNewmanAlgo("data/348.edges", "result/348.newman.data");
+	girvanNewmanAlgo("data/414.edges", "result/414.newman.data");
+	girvanNewmanAlgo("data/686.edges", "result/686.newman.data");
+	girvanNewmanAlgo("data/698.edges", "result/698.newman.data");
+	girvanNewmanAlgo("data/1684.edges", "result/1684.newman.data");//too large
+	girvanNewmanAlgo("data/1912.edges", "result/1912.newman.data");//too large
+	girvanNewmanAlgo("data/3437.edges", "result/3437.newman.data");//too large
+	girvanNewmanAlgo("data/3980.edges", "result/0.newman.data");
+
 	return 0;
 }

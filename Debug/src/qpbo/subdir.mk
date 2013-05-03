@@ -4,23 +4,26 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../src/ego/Cluster.cpp \
-../src/ego/EgoGraph.cpp \
-../src/ego/util.cpp 
+../src/qpbo/QPBO.cpp \
+../src/qpbo/QPBO_extra.cpp \
+../src/qpbo/QPBO_maxflow.cpp \
+../src/qpbo/QPBO_postprocessing.cpp 
 
 OBJS += \
-./src/ego/Cluster.o \
-./src/ego/EgoGraph.o \
-./src/ego/util.o 
+./src/qpbo/QPBO.o \
+./src/qpbo/QPBO_extra.o \
+./src/qpbo/QPBO_maxflow.o \
+./src/qpbo/QPBO_postprocessing.o 
 
 CPP_DEPS += \
-./src/ego/Cluster.d \
-./src/ego/EgoGraph.d \
-./src/ego/util.d 
+./src/qpbo/QPBO.d \
+./src/qpbo/QPBO_extra.d \
+./src/qpbo/QPBO_maxflow.d \
+./src/qpbo/QPBO_postprocessing.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
-src/ego/%.o: ../src/ego/%.cpp
+src/qpbo/%.o: ../src/qpbo/%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
 	g++ -O0 -g3 -Wall -c -fmessage-length=0 -std=c++0x -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
