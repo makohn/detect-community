@@ -75,9 +75,6 @@ static void write_community(const NewmanGraph& graph, const communityV& cmtys,
 	}
 }
 
-#ifndef CLOCKS_PER_SEC
-#define CLOCKS_PER_SEC 1000000
-#endif
 
 void girvanNewmanAlgo(const string& ifilename, const string& ofilename) {
 	FILE * istream = fopen(ifilename.c_str(), "r");
@@ -95,14 +92,17 @@ void girvanNewmanAlgo(const string& ifilename, const string& ofilename) {
 	e /= 2;
 
 	printf("%s : %d %d\n", ifilename.c_str(), n, e);
-	clock_t start = clock();
+	time_t start, end;
+	time(&start);
+	printf("%ld\n", start);
 	double Q = GirvanNewman(graph, cmtyV);
-	clock_t end = clock();
+	time(&end);
+	printf("%ld\n", end);
 
 	fprintf(ostream, "nodes : %d\nedges : %d\n", n, e);
 	fprintf(ostream, "Modularity is %0.6f\n", Q);
 	fprintf(ostream, "communities : %u\n", cmtyV.size());
-	fprintf(ostream, "cost time : %f\n", double(end - start) / CLOCKS_PER_SEC);
+	fprintf(ostream, "cost time : %.2lf\n", difftime(end, start));
 	write_community(graph, cmtyV, ostream);
 
 	fclose(istream);

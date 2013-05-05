@@ -30,8 +30,6 @@ void Cluster::train(int K, int reps, int gradientReps, int improveReps,
 	const int M = graph_->num_nodes_;
 	const double rate = 1.0 / graph_->num_nodes_ / graph_->num_nodes_;
 	srand(time(0));
-	delete[] theta_;
-	delete[] alpha_;
 	num_ = K * N;
 	theta_ = new double[num_];
 	alpha_ = new double[K];
@@ -66,10 +64,10 @@ void Cluster::train(int K, int reps, int gradientReps, int improveReps,
 		int changed = 0;
 		for (const auto & u : order) {
 			chat_[u] = minimize_graphcuts(u, improveReps, changed);
-            for(const auto & i : chat_[u]) {
-                printf("%d ", i);
-            }
-            puts("");
+			for (const auto & i : chat_[u]) {
+				printf("%d ", i);
+			}
+			puts("");
 		}
 		double loglike_prev = loglikelihood(theta_, alpha_, chat_);
 		printf("loglikelihood %lf\n", loglike_prev);
