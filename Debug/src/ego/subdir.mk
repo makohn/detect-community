@@ -6,16 +6,22 @@
 CPP_SRCS += \
 ../src/ego/Cluster.cpp \
 ../src/ego/EgoGraph.cpp \
+../src/ego/ego_ml_algo.cpp \
+../src/ego/graph_match.cpp \
 ../src/ego/util.cpp 
 
 OBJS += \
 ./src/ego/Cluster.o \
 ./src/ego/EgoGraph.o \
+./src/ego/ego_ml_algo.o \
+./src/ego/graph_match.o \
 ./src/ego/util.o 
 
 CPP_DEPS += \
 ./src/ego/Cluster.d \
 ./src/ego/EgoGraph.d \
+./src/ego/ego_ml_algo.d \
+./src/ego/graph_match.d \
 ./src/ego/util.d 
 
 

@@ -25,6 +25,7 @@ public:
 	map<pair<int, int>, map<int, int>*> edge_features_;
 	vector<vector<int> > feature_;
 	int num_nodes_;
+	int num_edges_;
 	int num_features_;
 	int get_node(int index) const;
 	int get_index(int node) const;

@@ -91,6 +91,7 @@ void EgoGraph::read_edge(const string& edge_file) {
 		v = node_index_[v];
 		edge_.insert(make_pair(u, v));
 	}
+	num_edges_ = int(edge_.size());
 	fin.close();
 }
 void EgoGraph::read_cluster(const string& cluster_file) {
