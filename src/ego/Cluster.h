@@ -27,6 +27,10 @@ public:
 private:
 	std::set<int> minimize_graphcuts(int k, int improveReps, int& changed);
 	void dl(double* dldt, double* dlda, int K, double lambda);
+	void InitialSet(std::set<int>& _set, double* theta, double& alpha,
+			int num_nodes, int num_feature);
+	void GradientAscent(double * theta, double * alpha, vector<set<int> >& chat,
+			double rate, int K, int reps, int lamda);
 };
 
 } /* namespace ego */

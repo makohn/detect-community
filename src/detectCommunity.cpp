@@ -15,7 +15,6 @@ using namespace std;
 #include "girvannewman/girvannewman.h"
 #include "ego/ego_ml_algo.h"
 int main() {
-	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/0", "result/0.ML.data");
 	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/698", "result/698.ML.data");
 	//logger = fopen("res.out", "w");
 	//test_ego(3, 1, 1, 50, 5, "data/698");
