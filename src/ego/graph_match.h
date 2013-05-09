@@ -1,18 +1,19 @@
-/*
- * graph_match.h
- *
- *  Created on: May 6, 2013
- *      Author: ronaflx
- */
+//============================================================================
+// Name        : graph_match.h
+// Author      : ronaflx
+// Version     : 1.0
+// Copyright   : GNU GPL
+// Description : detect community in ego-network
+//============================================================================
 
-#ifndef GRAPH_MATCH_H_
-#define GRAPH_MATCH_H_
+#ifndef SRC_EGO_GRAPH_MATCH_H_
+#define SRC_EGO_GRAPH_MATCH_H_
 
 #include <vector>
 #include <set>
-using namespace std;
 
-int SetSimilarty(const set<int>& one, const set<int>& that);
+int SetSimilarty(const std::set<int>& one, const std::set<int>& that);
 
-int GraphMatch(const vector<set<int> >& one, const vector<set<int> >& that);
-#endif /* GRAPH_MATCH_H_ */
+int GraphMatch(const std::vector<std::set<int> >& one,
+        const std::vector<std::set<int> >& that);
+#endif  // SRC_EGO_GRAPH_MATCH_H_
