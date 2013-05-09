@@ -10,7 +10,8 @@
 #include "EgoGraph.h"
 #include "Cluster.h"
 namespace ego {
-static void PrintInfo(const Cluster& cluster, FILE * ostream, int K, double times) {
+static void PrintInfo(const Cluster& cluster, FILE * ostream, int K,
+		double times) {
 	const vector<set<int> >& one = cluster.chat_;
 	const vector<set<int> >& that = cluster.graph_->cluster_;
 	fprintf(ostream, "nodes : %d\n", cluster.graph_->num_nodes_);
@@ -51,10 +52,12 @@ void EgoMLAlgo(int K, int lamda, int reps, int gradientReps, int improveReps,
 	const string selfFeature = ifilename + ".egofeat";
 	const string clusterFile = ifilename + ".circles";
 	const string edgeFile = ifilename + ".edges";
-	time_t start , end;
+	time_t start, end;
 	time(&start);
 	ego::EgoGraph graph(nodeFeature, selfFeature, clusterFile, edgeFile);
 	ego::Cluster cluster(&graph);
+	printf("%d %d %d\n", cluster.graph_->num_nodes_, cluster.graph_->num_edges_,
+			cluster.graph_->num_features_);
 	cluster.train(K, reps, gradientReps, improveReps, lamda, 1);
 	time(&end);
 	FILE * ostream = fopen(ofilename.c_str(), "w");

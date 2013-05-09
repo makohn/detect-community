@@ -11,6 +11,7 @@
 #include <algorithm>
 #include "util.h"
 #include "../qpbo/QPBO.h"
+
 namespace ego {
 
 Cluster::Cluster(EgoGraph * graph) :
@@ -23,6 +24,7 @@ Cluster::~Cluster() {
 	delete[] theta_;
 	delete[] alpha_;
 }
+
 void Cluster::train(int K, int reps, int gradientReps, int improveReps,
 		double lamda, int whichLoss) {
 	//initialize
@@ -173,13 +175,10 @@ std::set<int> Cluster::minimize_graphcuts(int k, int improveReps,
 	double oldE = 0.0, newE = 0.0;
 	for (const auto & i : graph_->edge_features_) {
 		pair<int, int> e = i.first;
-		int node0 = e.first;
-		int node1 = e.second;
+		int node0 = e.first, node1 = e.second;
+		int old_n0 = old_label[node0], old_n1 = old_label[node1];
+		int new_n0 = new_label[node0], new_n1 = new_label[node1];
 
-		int old_n0 = old_label[node0];
-		int old_n1 = old_label[node1];
-		int new_n0 = new_label[node0];
-		int new_n1 = new_label[node1];
 		if (old_n0 && old_n1) {
 			oldE += mc11[e];
 		} else {
@@ -191,7 +190,6 @@ std::set<int> Cluster::minimize_graphcuts(int k, int improveReps,
 			newE += mc00[e];
 		}
 	}
-	//printf("%d %.2lf %.2lf\n", k, newE, oldE);
 	if (newE > oldE || res.size() == 0) {
 		res = chat_[k];
 	} else {
