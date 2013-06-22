@@ -1,18 +1,20 @@
-/*
- * util.h
- *
- *  Created on: Apr 22, 2013
- *      Author: ronaflx
- */
+//============================================================================
+// Name        : util.h
+// Author      : ronaflx
+// Version     : 1.0
+// Copyright   : GNU GPL
+// Description : detect community in ego-network
+//============================================================================
 
-#ifndef UTIL_H_
-#define UTIL_H_
-using std::vector;
-using std::map;
+#ifndef SRC_EGO_UTIL_H_
+#define SRC_EGO_UTIL_H_
+#include <map>
+#include <vector>
 
-void diff(int * first, int * second, int * to, int n);
-void diff(const vector<int>& first, const vector<int>& second, int *to);
-map<int, int>* make_sparse(int * f, int n);
-double inp(map<int, int>* x, const double * y, int D);
-double sgn(double x);
-#endif /* UTIL_H_ */
+void Diff(int * first, int * second, int * to, int n);
+void Diff(const std::vector<int>& first, const std::vector<int>& second,
+        int *to);
+std::map<int, int>* MakeSparse(int * f, int n);
+double InnerProduct(std::map<int, int>* x, const double * y, int D);
+double Sgn(double x);
+#endif  // SRC_EGO_UTIL_H_
