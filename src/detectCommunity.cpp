@@ -15,16 +15,18 @@ using namespace std;
 #include "girvannewman/girvannewman.h"
 #include "ego/ego_ml_algo.h"
 int main() {
-	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/0", "result/0.ML.data");
-	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/348", "result/348.ML.data");
-	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/414", "result/414.ML.data");
-	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/686", "result/686.ML.data");
-	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/698", "result/698.ML.data");
-	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/3437", "result/3437.ML.data");
-	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/3980", "result/3980.ML.data");
-	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/107", "result/107.ML.data"); //too large > 1000
-	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/1684", "result/1684.ML.data"); //too large > 700
-	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/1912", "result/1912.ML.data"); //too large > 700
+
+	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/0", "result/0.initial1.data");
+	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/348", "result/348.initial1.data");
+	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/414", "result/414.initial1.data");
+	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/686", "result/686.initial1.data");
+	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/698", "result/698.initial1.data");
+	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/3437", "result/3437.initial1.data");
+	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/3980", "result/3980.initial1.data");
+	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/107", "result/107.initial1.data"); //too large > 1000
+	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/1684", "result/1684.initial1.data"); //too large > 700
+	ego::EgoMLAlgo(3, 1, 25, 50, 5, "data/1912", "result/1912.initial1.data"); //too large > 700
+
 //	girvanNewmanAlgo("data/0.edges", "result/0.newman.data");
 //	girvanNewmanAlgo("data/107.edges", "result/107.newman.data"); //too large > 1000
 //	girvanNewmanAlgo("data/348.edges", "result/348.newman.data");

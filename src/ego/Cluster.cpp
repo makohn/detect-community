@@ -253,11 +253,15 @@ void Cluster::dl(double* dldt, double* dlda, int K, double lamda) {
 void Cluster::InitialSet(set<int>& _set, double * theta, double & alpha,
 		int num_nodes, int num_feature) {
 	_set.clear();
-	for (int i = 0; i < num_nodes; i++) {
+	const int INODE = 1;
+	for(int i = 0;i < INODE;i++) {
+		_set.insert(rand() % num_nodes);
+	}
+	/*for (int i = 0; i < num_nodes; i++) {
 		if ((rand() & 1)) {
 			_set.insert(i);
 		}
-	}
+	}*/
 	// set a single feature 1.0, other is 0.0
 	fill(theta, theta + num_feature, 0.0);
 	theta[rand() % num_feature] = 1.0;
