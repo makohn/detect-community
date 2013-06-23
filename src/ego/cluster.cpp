@@ -255,7 +255,7 @@ void Cluster::dl(double* dldt, double* dlda, int K, double lamda) {
 void Cluster::InitialSet(set<int>* _set, double * theta, double * alpha,
         int num_nodes, int num_feature) {
     _set->clear();
-    unsigned int seed = 0;
+    unsigned int seed = 2;
     for (int i = 0; i < num_nodes; i++) {
         if ((rand_r(&seed) & 1)) {
             _set->insert(i);

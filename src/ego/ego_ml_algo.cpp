@@ -53,13 +53,15 @@ static void PrintInfo(const Cluster& cluster, FILE * ostream, int K,
 
 void EgoMLAlgo(int K, int lamda, int reps, int gradientReps, int improveReps,
         const string& ifilename, const string& ofilename) {
-    const string nodeFeature = ifilename + ".feat";
-    const string selfFeature = ifilename + ".egofeat";
-    const string clusterFile = ifilename + ".circles";
-    const string edgeFile = ifilename + ".edges";
+    const string node_feature = ifilename + ".feat";
+    const string self_feature = ifilename + ".egofeat";
+    const string cluster_file = ifilename + ".circles";
+    const string edge_file = ifilename + ".edges";
+    const string feature_name = ifilename + ".featnames";
     time_t start, end;
     time(&start);
-    ego::EgoGraph graph(nodeFeature, selfFeature, clusterFile, edgeFile);
+    ego::EgoGraph graph(node_feature, self_feature, cluster_file, edge_file,
+            feature_name);
     printf("%d %d %d\n", graph.num_nodes_, graph.num_edges_,
             graph.num_features_);
     ego::Cluster cluster(&graph);

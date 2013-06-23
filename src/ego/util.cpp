@@ -13,11 +13,6 @@ using std::vector;
 using std::map;
 static const double EPS = 1e-6;
 
-void Diff(int * first, int * second, int * to, int n) {
-    for (int i = 0; i < n; i++) {
-        to[i] = first[i] ^ second[i];
-    }
-}
 void Diff(const vector<int>& first, const vector<int>& second, int *to) {
     int f_size = static_cast<int>(first.size());
     int s_size = static_cast<int>(second.size());

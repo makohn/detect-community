@@ -25,7 +25,7 @@ class EgoGraph {
     public:
         EgoGraph(const string& node_feature_file,
                 const string& self_feature_file, const string& cluster_file,
-                const string& edge_file, int which = 0);
+                const string& edge_file, const string& feature_name);
         virtual ~EgoGraph();
         vector<set<int> > cluster_;
         set<pair<int, int> > edge_;

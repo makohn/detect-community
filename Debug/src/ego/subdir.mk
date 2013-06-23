@@ -8,6 +8,7 @@ CPP_SRCS += \
 ../src/ego/ego_ml_algo.cpp \
 ../src/ego/egograph.cpp \
 ../src/ego/graph_match.cpp \
+../src/ego/profiletree.cpp \
 ../src/ego/util.cpp 
 
 OBJS += \
@@ -15,6 +16,7 @@ OBJS += \
 ./src/ego/ego_ml_algo.o \
 ./src/ego/egograph.o \
 ./src/ego/graph_match.o \
+./src/ego/profiletree.o \
 ./src/ego/util.o 
 
 CPP_DEPS += \
@@ -22,6 +24,7 @@ CPP_DEPS += \
 ./src/ego/ego_ml_algo.d \
 ./src/ego/egograph.d \
 ./src/ego/graph_match.d \
+./src/ego/profiletree.d \
 ./src/ego/util.d 
 
 

@@ -14,23 +14,28 @@
 #include <vector>
 #include <set>
 
-#include "./egograph.h"
-#include "./util.h"
+#include "egograph.h"
+#include "util.h"
+#include "./profiletree.h"
 
 using std::fill;
 namespace ego {
 
 EgoGraph::EgoGraph(const string& node_feature_file,
         const string& self_feature_file, const string& cluster_file,
-        const string& edge_file, int which) {
+        const string& edge_file, const string& feature_name) {
     ReadNodeFeature(node_feature_file, self_feature_file);
     ReadCluster(cluster_file);
     ReadEdge(edge_file);
+    ProfileTree tree(feature_name);
+    num_edges_ = static_cast<int>(edge_.size());
+    num_nodes_ = static_cast<int>(feature_.size());
+    num_features_ = tree.get_num_feature() + 1;
     int * d = new int[num_features_];
     for (int i = 0; i < num_nodes_; i++) {
         for (int j = i + 1; j < num_nodes_; j++) {
             d[0] = 1;
-            Diff(feature_[i], feature_[j], d + 1);
+            tree.Diff(feature_[i], feature_[j], d + 1);
             edge_features_[std::make_pair(i, j)] = MakeSparse(d, num_features_);
         }
     }
@@ -75,8 +80,6 @@ void EgoGraph::ReadNodeFeature(const string& node_feature_file,
         f.erase(f.begin());
         feature_.push_back(f);
     }
-    num_nodes_ = feature_.size();
-    num_features_ = feature_[0].size() + 1;
     fclose(istream);
 }
 
@@ -89,7 +92,6 @@ void EgoGraph::ReadEdge(const string& edge_file) {
         v = node_index_[v];
         edge_.insert(std::make_pair(u, v));
     }
-    num_edges_ = static_cast<int>(edge_.size());
     fclose(istream);
 }
 void EgoGraph::ReadCluster(const string& cluster_file) {
